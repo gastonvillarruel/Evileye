@@ -27,6 +27,8 @@ addEventListener('mousemove', e=>{
 
 		// posición del mouse en radianes (medida de ángulo)
 		const rad = Math.atan2(deltaY, deltaX);
+			// atan2(y, x) retorna el ángulo, en radianes, entre el eje positivo X y el punto (en las coordenadas x e y)
+
 
 		// conversión a grados (deg) por regla de 3, y redondeo
 		const deg = Math.round(rad*(180/Math.PI));
@@ -34,11 +36,11 @@ addEventListener('mousemove', e=>{
 
 		eye.style.transform = `rotate(${deg}deg)`
 
-
-		console.log(eyeX, eyeY)
-		console.log(mouseX, mouseY)
-		console.log(deltaX, deltaY)
-		console.log(rad, deg)
+		console.log(eye.firstElementChild.className)
+		console.log("eye coord: ",eyeX, eyeY)
+		console.log('mouse coord: ', mouseX, mouseY)
+		console.log('delta: ', deltaX, deltaY)
+		console.log('rad: ', rad, 'deg: ', deg)
 	})
 })
 
