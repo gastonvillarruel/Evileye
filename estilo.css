@@ -5,12 +5,6 @@ h1{
 	color: white;
 	text-align: center;
 }
-:root{
-	--lefteyeX: 0;
-	--lefteyeY: 0;
-	--righteyeX: 0;
-	--righteyeY: 0;
-}
 .face{
 	width: 150px;
 	height: 150px;
@@ -44,7 +38,6 @@ h1{
 	width: 60px;
 	height: 60px;
 	border-radius: 50%;
-	transition: all .05s;
 	transform: translateX(15px);
 	display: flex;
 	align-items: center;
