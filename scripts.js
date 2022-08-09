@@ -1,9 +1,28 @@
-addEventListener('click', e=>{
-	console.log(e);
+const eyelids = document.querySelectorAll('.eyelids');
+const eyes = document.querySelectorAll('.pupil-container');
+const eyeball = document.querySelectorAll('.eyes')
+
+
+
+addEventListener('mousedown', e=>{
+	eyelids.forEach(eyelids=>eyelids.style.height='50%');
 });
 
+addEventListener('mouseup', e=>{
+	eyelids.forEach(eyelids=>eyelids.style.height='0');
+});
 
-const eyes = document.querySelectorAll('.pupil-container');
+const evileye = ()=>{
+	let g = 255;
+	let b = 255;
+	return () => {
+		g--;
+		b--;
+		eyeball.forEach(eyes => eyes.style.background = `rgb(255, ${g}, ${b})`);
+		console.log(g);
+	}
+}
+setInterval(evileye(), 500)
 
 
 addEventListener('mousemove', e=>{
@@ -11,7 +30,7 @@ addEventListener('mousemove', e=>{
 	eyes.forEach(eye=>{
 
 		const eyePos = eye.getBoundingClientRect();
-		//devuelve un objecto (DOMRect) con datos sobre la posición del elemento relativa a la esquina superior izquierda de la ventana.
+			//devuelve un objecto (DOMRect) con datos sobre la posición del elemento relativa a la esquina superior izquierda de la ventana.
 
 		// coordenadas del mouse
 		const mouseX = e.clientX;
@@ -36,7 +55,7 @@ addEventListener('mousemove', e=>{
 		// correción para cuando el ángulo toma un valor negativo
 		if (deg<0) deg = deg + 360;
 
-		eye.style.transform = `rotate(${deg}deg)`
+		eye.style.transform = `rotate(${deg}deg)`;
 
 		console.log(eye.firstElementChild.className)
 		console.log("eye coord: "+eyeX, eyeY)

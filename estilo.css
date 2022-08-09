@@ -4,6 +4,7 @@ body{
 h1{
 	color: white;
 	text-align: center;
+	user-select: none;
 }
 .face{
 	width: 150px;
@@ -20,10 +21,11 @@ h1{
 	display: flex;
 	justify-content: center;
 }
+
 .eyes{
 	width: 40%;
 	height: 60%;
-	background: #fff;
+	background: rgb(255, 255, 255);
 	position: relative;
 	border-radius: 50%;
 	margin: 0 5px;
@@ -32,9 +34,25 @@ h1{
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	box-shadow: 0 0 10px #000a, inset 0 0 20px #f00a;
+	box-shadow: 0 0 10px #000a, inset 0 0 15px #f00a;
+}
+.eyelids{
+	background-color: #fa5;
+	position: absolute;
+	z-index: 50;
+	width: 70px;
+	height: 0;
+	box-shadow: inset 0 0 10px #000a;
+	transition: height .05s;
+}
+.supeyelids{
+	top: 0;
+}
+.infeyelids{
+	bottom: 0;
 }
 .pupil-container{
+	background: transparent;
 	width: 60px;
 	height: 60px;
 	border-radius: 50%;
