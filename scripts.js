@@ -4,27 +4,55 @@ const eyeball = document.querySelectorAll('.eyes')
 
 
 
-addEventListener('mousedown', e=>{
-	eyelids.forEach(eyelids=>eyelids.style.height='50%');
-});
-
-addEventListener('mouseup', e=>{
-	eyelids.forEach(eyelids=>eyelids.style.height='0');
-});
-
+let gb = 255;
+// función para disminuir gb:
 const evileye = ()=>{
-	let g = 255;
-	let b = 255;
-	return () => {
-		g--;
-		b--;
-		eyeball.forEach(eyes => eyes.style.background = `rgb(255, ${g}, ${b})`);
-		console.log(g);
+	gb--;
+	eyeball.forEach(eyes => eyes.style.background = `rgb(255, ${gb}, ${gb})`);
+	if (gb<=150) {
+			if (gb==70) clearInterval(interval);
+			eyelids.forEach(eyelids=>{
+				eyelids.style.transition='height 1s'
+				eyelids.style.height=`20%`;
+			})	
+			//evileyelids();
 	}
+	console.log(gb);
 }
-setInterval(evileye(), 500)
+	
+// intervalo para ejecutar la función evileye cada 1 seg:
+let interval;
+const evileyeInterval = ()=>{
+	interval = setInterval(evileye, 500);
+}
+evileyeInterval();
 
 
+addEventListener('click', ()=>{
+	if (gb<250) {
+		gb += 25;
+		eyeball.forEach(eyes => eyes.style.background = `rgb(255, ${gb}, ${gb})`);
+	}
+	evileyeInterval();
+})
+
+
+// Función pestañar
+const blink = (e)=>{
+	eyelids.forEach(eyelids=>eyelids.style.transition='height .05s');
+	if (e.type == 'mousedown'){
+		eyelids.forEach(eyelids=>eyelids.style.height='50%');
+		clearInterval(interval);
+	}else eyelids.forEach(eyelids=>eyelids.style.height='0');
+
+}
+
+addEventListener('mousedown', blink);
+
+addEventListener('mouseup', blink);
+
+
+// Escucha de evento mousemove para mover los ojos hacia el puntero
 addEventListener('mousemove', e=>{
 
 	eyes.forEach(eye=>{
@@ -57,11 +85,11 @@ addEventListener('mousemove', e=>{
 
 		eye.style.transform = `rotate(${deg}deg)`;
 
-		console.log(eye.firstElementChild.className)
-		console.log("eye coord: "+eyeX, eyeY)
-		console.log('mouse coord: '+ mouseX, mouseY)
-		console.log('delta: '+ deltaX, deltaY)
-		console.log('rad: '+ rad, 'deg: ', deg + "°")
+		// console.log(eye.firstElementChild.className)
+		// console.log("eye coord: "+eyeX, eyeY)
+		// console.log('mouse coord: '+ mouseX, mouseY)
+		// console.log('delta: '+ deltaX, deltaY)
+		// console.log('rad: '+ rad, 'deg: ', deg + "°")
 	})
 })
 
