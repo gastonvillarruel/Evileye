@@ -13,7 +13,7 @@ h1{
 	position: absolute;
 	border-radius: 50%;
 	background: #fa5;
-	box-shadow: 0 0 100px #fffa, inset 0 0 20px #000;
+	box-shadow: 0 0 50px #000, 0 0 100px #fffa, inset 0 0 20px #000;
 	top: 0;
 	left: 0;
 	right: 0;

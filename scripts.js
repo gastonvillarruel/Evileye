@@ -4,8 +4,8 @@ const eyeball = document.querySelectorAll('.eyes')
 
 
 
+// función para enrojecer los ojos:
 let gb = 255;
-// función para disminuir gb:
 const evileye = ()=>{
 	gb--;
 	eyeball.forEach(eyes => eyes.style.background = `rgb(255, ${gb}, ${gb})`);
@@ -15,7 +15,6 @@ const evileye = ()=>{
 				eyelids.style.transition='height 1s'
 				eyelids.style.height=`20%`;
 			})	
-			//evileyelids();
 	}
 	console.log(gb);
 }
@@ -39,6 +38,8 @@ addEventListener('click', ()=>{
 
 // Función pestañar
 const blink = (e)=>{
+	console.log(e.button)
+	if (e.button!=0) return;
 	eyelids.forEach(eyelids=>eyelids.style.transition='height .05s');
 	if (e.type == 'mousedown'){
 		eyelids.forEach(eyelids=>eyelids.style.height='50%');
