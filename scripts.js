@@ -27,13 +27,6 @@ const evileyeInterval = ()=>{
 evileyeInterval();
 
 
-addEventListener('click', ()=>{
-	if (gb<250) {
-		gb += 25;
-		eyeball.forEach(eyes => eyes.style.background = `rgb(255, ${gb}, ${gb})`);
-	}
-	evileyeInterval();
-})
 
 
 // Función pestañar
@@ -45,54 +38,97 @@ const blink = (e)=>{
 		eyelids.forEach(eyelids=>eyelids.style.height='50%');
 		clearInterval(interval);
 	}else eyelids.forEach(eyelids=>eyelids.style.height='0');
-
+	
 }
 
-addEventListener('mousedown', blink);
 
-addEventListener('mouseup', blink);
-
-
-// Escucha de evento mousemove para mover los ojos hacia el puntero
-addEventListener('mousemove', e=>{
-
+// función mover los ojos:
+const eyesRotation = (e)=>{
 	eyes.forEach(eye=>{
-
+		
 		const eyePos = eye.getBoundingClientRect();
-			//devuelve un objecto (DOMRect) con datos sobre la posición del elemento relativa a la esquina superior izquierda de la ventana.
-
+		//devuelve un objecto (DOMRect) con datos sobre la posición del elemento relativa a la esquina superior izquierda de la ventana.
+		
 		// coordenadas del mouse
 		const mouseX = e.clientX;
 		const mouseY = e.clientY;
-
+		
 		// coordenadas del ojo
 		const eyeX = eyePos.left + (eyePos.width/2);
 		const eyeY = eyePos.top + (eyePos.height/2);
-
+		
 		//diferencia entre las anteriores (largo de cada cateto)
 		const deltaX = eyeX - mouseX;
 		const deltaY = eyeY - mouseY;
-
+		
 		// posición del mouse en radianes (medida de ángulo). Aplicamos el arcotangente del cociente de los catetos para hallar el ángulo.
 		const rad = Math.atan2(deltaY, deltaX);
-			// atan2(y, x) retorna el ángulo, en radianes, entre el eje positivo X y el punto (en las coordenadas x e y)
-
-
+		// atan2(y, x) retorna el ángulo, en radianes, entre el eje positivo X y el punto (en las coordenadas x e y)
+		
+	
 		// conversión a grados (deg) por regla de 3, y redondeo
 		let deg = Math.round(rad*(180/Math.PI));
-
+		
 		// correción para cuando el ángulo toma un valor negativo
 		if (deg<0) deg = deg + 360;
-
+		
 		eye.style.transform = `rotate(${deg}deg)`;
-
+		
 		// console.log(eye.firstElementChild.className)
 		// console.log("eye coord: "+eyeX, eyeY)
 		// console.log('mouse coord: '+ mouseX, mouseY)
 		// console.log('delta: '+ deltaX, deltaY)
 		// console.log('rad: '+ rad, 'deg: ', deg + "°")
 	})
-})
+}
+
+// Función para disminuir el rojo de los ojos:
+const reduceEvileye = ()=>{
+	if (gb<250) {
+		gb += 25;
+		eyeball.forEach(eyes => eyes.style.background = `rgb(255, ${gb}, ${gb})`);
+	}
+	evileyeInterval();
+}
+
+
+// Función para mover aleatoriamente la cara:
+const face = document.querySelector('.face');
+const faceMove = ()=>{
+	// const minWidth=face.clientWidth/2;
+	const maxWidth=innerWidth - face.clientWidth;
+	// const minHeight=face.clientHeight/2;
+	const maxHeight=innerHeight - face.clientHeight;
+	// const x = Math.random()*(maxWidth-minWidth+1)+minWidth;
+	// const y = Math.random()*(maxHeight-minHeight+1)+minHeight;
+	// face.style.transition='top 1s, left 1s'
+	// face.style.top=y+'px';
+	// face.style.left=x+'px';
+	
+	const x = Math.random()*maxWidth;
+	const y = Math.random()*maxHeight;
+
+	face.style.transform=`translate(${x}px, ${y}px)`
+
+	console.log(x, y)
+}
+
+
+
+
+
+
+
+
+// Escuchas de eventos
+addEventListener('mousemove', eyesRotation)
+
+addEventListener('mousedown', blink);
+
+addEventListener('mouseup', blink);
+
+addEventListener('click', reduceEvileye)
+
 
 
 

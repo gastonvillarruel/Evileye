@@ -1,6 +1,10 @@
+
 body{
 	background: linear-gradient(45deg, #305, black);
 	height: 100vh;
+	overflow: hidden;
+	margin: 0;
+	padding: 0;
 }
 h1{
 	color: white;
@@ -14,11 +18,11 @@ h1{
 	border-radius: 50%;
 	background: #fa5;
 	box-shadow: 0 0 50px #000, 0 0 100px #fffa, inset 0 0 20px #000;
-	top: 0;
+	/* top: 0;
 	left: 0;
 	right: 0;
-	bottom: 0;
-	margin: auto;
+	bottom: 0; 
+	margin: auto;*/
 	display: flex;
 	justify-content: center;
 }
