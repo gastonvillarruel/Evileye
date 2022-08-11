@@ -16,7 +16,7 @@ const evileye = ()=>{
 				eyelids.style.height=`20%`;
 			})	
 	}
-	console.log(gb);
+	// console.log(gb);
 }
 	
 // intervalo para ejecutar la función evileye cada 1 seg:
@@ -94,22 +94,39 @@ const reduceEvileye = ()=>{
 
 // Función para mover aleatoriamente la cara:
 const face = document.querySelector('.face');
-const faceMove = ()=>{
-	// const minWidth=face.clientWidth/2;
+const faceMove = (x, y)=>{
+
 	const maxWidth=innerWidth - face.clientWidth;
-	// const minHeight=face.clientHeight/2;
 	const maxHeight=innerHeight - face.clientHeight;
-	// const x = Math.random()*(maxWidth-minWidth+1)+minWidth;
-	// const y = Math.random()*(maxHeight-minHeight+1)+minHeight;
-	// face.style.transition='top 1s, left 1s'
-	// face.style.top=y+'px';
-	// face.style.left=x+'px';
+
+	console.log(typeof x, y)
+
+	//const randomX = Math.round(Math.random());
+	const randomY = Math.random()*maxHeight;
 	
-	const x = Math.random()*maxWidth;
-	const y = Math.random()*maxHeight;
+	y = randomY;
 
-	face.style.transform=`translate(${x}px, ${y}px)`
+	(x==undefined)?
+		x = maxWidth
+		:	
+		(x==0)? x = maxWidth : x = 0;
+		
+		
+	
+	
+	
+	face.style.transition='transform 2s ease';
+	face.style.transform=`translate(${x}px, ${y}px)`;
 
+
+	setTimeout(()=>{
+		const faceLocation = face.getBoundingClientRect();
+		console.dir(faceLocation);
+		faceMove(x, y);
+	}, 1500)
+		
+	
+	
 	console.log(x, y)
 }
 
