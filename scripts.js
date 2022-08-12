@@ -92,44 +92,99 @@ const reduceEvileye = ()=>{
 }
 
 
+
 // Función para mover aleatoriamente la cara:
 const face = document.querySelector('.face');
-const faceMove = (x, y)=>{
 
+const faceMove = (x, y, ang, xi, yi)=>{
+	
 	const maxWidth=innerWidth - face.clientWidth;
 	const maxHeight=innerHeight - face.clientHeight;
-
-	console.log(typeof x, y)
-
-	//const randomX = Math.round(Math.random());
-	const randomY = Math.random()*maxHeight;
-	
-	y = randomY;
-
-	(x==undefined)?
-		x = maxWidth
-		:	
-		(x==0)? x = maxWidth : x = 0;
-		
-		
-	
-	
 	
 	face.style.transition='transform 2s ease';
+
+	// función llamada sin argumentos:
+	if (y==undefined && x==undefined && ang==undefined) {
+		
+		y = Math.floor(Math.random()*(maxHeight));
+		x = maxWidth;
+		let rad = Math.atan2(y,x);
+		ang = rad * (180/Math.PI);
+		//face.style.transform=`translate(${x}px, ${y}px)`;
+		xi = 0;
+		yi = 0;
+		console.log('hola', maxWidth, x)
+		face.style.transform=`translate(${x}px, ${y}px)`;
+	}
+	
+	// función llamada con argumentos:
+	if (y==maxHeight && x!= maxWidth){
+		xi = x;
+		yi = y;
+
+		y = Math.tan(ang*Math.PI/180) * x;
+
+		if (y >= 0) {
+			x = 0;
+			let rad = Math.atan2(maxHeight-y, xi);
+			ang = rad * (180/Math.PI);
+		}
+		else {
+			let rad2 = Math.atan2(y, x);
+			x = Math.tan(rad2)*y;
+			y = 0;
+
+			let rad = Math.atan2(y, xi-x);
+			ang = rad * (180/Math.PI);
+		}
+	}
+
+	if (x==maxWidth){
+		y = Math.tan(ang*Math.PI/180) * x;
+		yi = y;
+		xi = x;
+
+		if (y>maxHeight){
+			let rad2 = Math.atan2(y-maxHeight, x);
+			x = Math.tan(rad2)*y;
+			y = maxHeight;
+	
+			let rad = Math.atan2(maxHeight - y, maxWidth - x);
+			ang = rad * (180/Math.PI);
+		}else{
+			x = 0;
+			let rad = Math.atan2(y-yi, xi);
+			ang = rad * (180/Math.PI);
+			
+		}
+	}
+	
+
+
 	face.style.transform=`translate(${x}px, ${y}px)`;
+
+	// if (x==undefined) x = maxWidth;
+	// else if (x==0) x = maxWidth;
+	// else x = 0;
+		
+		
+	
+	
+	
 
 
 	setTimeout(()=>{
 		const faceLocation = face.getBoundingClientRect();
 		console.dir(faceLocation);
-		faceMove(x, y);
-	}, 1500)
+		faceMove(x, y, ang, xi, yi);
+	}, 2000)
 		
 	
 	
 	console.log(x, y)
 }
 
+faceMove();
 
 
 
