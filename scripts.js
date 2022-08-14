@@ -95,7 +95,7 @@ const reduceEvileye = ()=>{
 
 // Función para mover aleatoriamente la cara:
 const face = document.querySelector('.face');
-/*
+
 const faceMove = (x, y, xi, yi)=>{
 	
 	const maxWidth=innerWidth - face.clientWidth;
@@ -105,7 +105,7 @@ const faceMove = (x, y, xi, yi)=>{
 	let rad;
 	let xf, xfc, yf, yfc, h;
 	
-	// función llamada sin argumentos:
+	// función llamada sin argumentos (primer movimiento):
 	if (y==undefined && x==undefined) {	
 		yfc = Math.floor(Math.random()*maxHeight);
 		xfc = maxWidth;
@@ -113,18 +113,28 @@ const faceMove = (x, y, xi, yi)=>{
 		yi = 0;
 		rad = Math.atan2(yfc, xfc) 
 		h=Math.round(xfc/Math.cos(rad));
-	}else if (x>0 && x<maxWidth){
+	}
+	// Si pega arriba o abajo:
+	else if (x>0 && x<maxWidth){
+		// cálculo del ángulo dependiendo si pega arriba (yi>y) o abajo (yi<y):
 		(yi>y)? 
 			rad = Math.atan(Math.abs(x-xi)/yi) 
 			:
 			rad = Math.atan(Math.abs(x-xi)/(maxHeight-yi));
+
 		xf = x + (Math.tan(rad)*maxHeight*Math.sign(x-xi));
+
+		// si xf está dentro de la pantalla (0 a maxWidth)
 		if (xf>=0 && xf<=maxWidth){
 			xfc=xf;
-			(yi>y)? yf = maxHeight : yf = 0;
+
+			// si venía de abajo, volverá abajo,y viceversa
+			(yi>y)? yf = maxHeight : yf = 0; 
 			yfc = yf;
 			h=Math.round(maxHeight/Math.cos(rad));
-		}else {
+		}
+		// si xf está fuera de la pantalla
+		else {
 			(xf<0)? xfc = 0 : xfc = maxWidth;
 			(yi>y)? 
 				(
@@ -140,7 +150,9 @@ const faceMove = (x, y, xi, yi)=>{
 		}
 		yi=y; 
 		xi=x;
-	}else{
+	}
+	//si pega en los costados:
+	else{
 		(xi>x)? 
 		rad = Math.atan(Math.abs(y-yi)/xi) 
 		:
@@ -182,33 +194,33 @@ const faceMove = (x, y, xi, yi)=>{
 	
 	
 }
-*/
-let dir;
-const compDir=()=>{
 
-}
-const faceMove = (x)=>{
-	//velX+=4;
+// let dir;
+// const compDir=()=>{
 
-	let direction = compDir();
+// }
+// const faceMove = (x)=>{
+// 	//velX+=4;
 
-	if (dir==ltr){
-		x+=4;
-	}else x-=4;
+// 	let direction = compDir();
 
-	let facePos= face.getBoundingClientRect();
-	console.dir(facePos)
+// 	if (dir==ltr){
+// 		x+=4;
+// 	}else x-=4;
 
-	face.style.transform=`translate(${x}px)`
+// 	let facePos= face.getBoundingClientRect();
+// 	console.dir(facePos)
+
+// 	face.style.transform=`translate(${x}px)`
 	
-	if (facePos.left>=innerWidth-facePos.width) {
-		dir = rtl;
-	}
-	setTimeout(()=>{
-		faceMove(x)
-	},10)
-}
-faceMove(0);
+// 	if (facePos.left>=innerWidth-facePos.width) {
+// 		dir = rtl;
+// 	}
+// 	setTimeout(()=>{
+// 		faceMove(x)
+// 	},10)
+// }
+faceMove();
 
 
 
