@@ -95,96 +95,120 @@ const reduceEvileye = ()=>{
 
 // Función para mover aleatoriamente la cara:
 const face = document.querySelector('.face');
-
-const faceMove = (x, y, ang, xi, yi)=>{
+/*
+const faceMove = (x, y, xi, yi)=>{
 	
 	const maxWidth=innerWidth - face.clientWidth;
 	const maxHeight=innerHeight - face.clientHeight;
 	
-	face.style.transition='transform 2s ease';
-
+	
+	let rad;
+	let xf, xfc, yf, yfc, h;
+	
 	// función llamada sin argumentos:
-	if (y==undefined && x==undefined && ang==undefined) {
-		
-		y = Math.floor(Math.random()*(maxHeight));
-		x = maxWidth;
-		let rad = Math.atan2(y,x);
-		ang = rad * (180/Math.PI);
-		//face.style.transform=`translate(${x}px, ${y}px)`;
+	if (y==undefined && x==undefined) {	
+		yfc = Math.floor(Math.random()*maxHeight);
+		xfc = maxWidth;
 		xi = 0;
 		yi = 0;
-		console.log('hola', maxWidth, x)
-		face.style.transform=`translate(${x}px, ${y}px)`;
-	}
-	
-	// función llamada con argumentos:
-	if (y==maxHeight && x!= maxWidth){
-		xi = x;
-		yi = y;
-
-		y = Math.tan(ang*Math.PI/180) * x;
-
-		if (y >= 0) {
-			x = 0;
-			let rad = Math.atan2(maxHeight-y, xi);
-			ang = rad * (180/Math.PI);
+		rad = Math.atan2(yfc, xfc) 
+		h=Math.round(xfc/Math.cos(rad));
+	}else if (x>0 && x<maxWidth){
+		(yi>y)? 
+			rad = Math.atan(Math.abs(x-xi)/yi) 
+			:
+			rad = Math.atan(Math.abs(x-xi)/(maxHeight-yi));
+		xf = x + (Math.tan(rad)*maxHeight*Math.sign(x-xi));
+		if (xf>=0 && xf<=maxWidth){
+			xfc=xf;
+			(yi>y)? yf = maxHeight : yf = 0;
+			yfc = yf;
+			h=Math.round(maxHeight/Math.cos(rad));
+		}else {
+			(xf<0)? xfc = 0 : xfc = maxWidth;
+			(yi>y)? 
+				(
+					yf = Math.abs(xfc - x) / Math.tan(rad),
+					h=Math.round(yf/Math.cos(rad))
+				)
+				:
+				(
+					yf = maxHeight - (Math.abs(xfc - x) / Math.tan(rad)),
+					h=Math.round(maxHeight-yf/Math.cos(rad))
+				)
+			yfc=yf;
 		}
-		else {
-			let rad2 = Math.atan2(y, x);
-			x = Math.tan(rad2)*y;
-			y = 0;
-
-			let rad = Math.atan2(y, xi-x);
-			ang = rad * (180/Math.PI);
+		yi=y; 
+		xi=x;
+	}else{
+		(xi>x)? 
+		rad = Math.atan(Math.abs(y-yi)/xi) 
+		:
+		rad = Math.atan(Math.abs(y-yi)/(maxWidth-xi));
+		yf = y + (Math.tan(rad)*maxWidth*Math.sign(y-yi));
+		if (yf>=0 && yf<=maxHeight){
+			yfc=yf;
+			(xi>x)? xf = maxWidth : xf = 0;
+			xfc=xf;
+			h=Math.round(maxWidth/Math.cos(rad));
+		}else {
+			(yf<0)? yfc = 0 : yfc = maxHeight;
+			(xi>x)? 
+				xf = Math.abs(yfc - y) / Math.tan(rad)
+				:
+				xf = maxWidth - (Math.abs(yfc - y) / Math.tan(rad));
+			h=Math.round(maxWidth/Math.cos(rad))
+				
+			xfc=xf;
 		}
+		yi=y;
+		xi=x;
 	}
-
-	if (x==maxWidth){
-		y = Math.tan(ang*Math.PI/180) * x;
-		yi = y;
-		xi = x;
-
-		if (y>maxHeight){
-			let rad2 = Math.atan2(y-maxHeight, x);
-			x = Math.tan(rad2)*y;
-			y = maxHeight;
-	
-			let rad = Math.atan2(maxHeight - y, maxWidth - x);
-			ang = rad * (180/Math.PI);
-		}else{
-			x = 0;
-			let rad = Math.atan2(y-yi, xi);
-			ang = rad * (180/Math.PI);
-			
-		}
-	}
-	
-
-
-	face.style.transform=`translate(${x}px, ${y}px)`;
-
-	// if (x==undefined) x = maxWidth;
-	// else if (x==0) x = maxWidth;
-	// else x = 0;
 		
+		let transition = h/1000;
 		
-	
-	
-	
+		console.log(h, transition)
 
+		face.style.transition=`transform ${transition}s linear`;
+		face.style.transform=`translate(${xfc}px, ${yfc}px)`;
+		
 
 	setTimeout(()=>{
 		const faceLocation = face.getBoundingClientRect();
-		console.dir(faceLocation);
-		faceMove(x, y, ang, xi, yi);
-	}, 2000)
-		
+		//console.dir(faceLocation);
+		faceMove(xfc, yfc, xi, yi);
+	}, h)
 	
 	
-	console.log(x, y)
+	
 }
+*/
+let dir;
+const compDir=()=>{
 
-faceMove();
+}
+const faceMove = (x)=>{
+	//velX+=4;
+
+	let direction = compDir();
+
+	if (dir==ltr){
+		x+=4;
+	}else x-=4;
+
+	let facePos= face.getBoundingClientRect();
+	console.dir(facePos)
+
+	face.style.transform=`translate(${x}px)`
+	
+	if (facePos.left>=innerWidth-facePos.width) {
+		dir = rtl;
+	}
+	setTimeout(()=>{
+		faceMove(x)
+	},10)
+}
+faceMove(0);
 
 
 
