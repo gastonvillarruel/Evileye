@@ -95,6 +95,7 @@ const reduceEvileye = ()=>{
 
 // Función para mover aleatoriamente la cara:
 const face = document.querySelector('.face');
+let velocity = 700
 
 const faceMove = (x, y, xi, yi)=>{
 	
@@ -191,7 +192,6 @@ const faceMove = (x, y, xi, yi)=>{
 					yi=y;
 					xi=x;
 				}
-				let velocity = 700
 				let transition = h/velocity;
 				
 				
@@ -210,7 +210,16 @@ const faceMove = (x, y, xi, yi)=>{
 			faceMove();
 			
 			
-			
+			const acelerate = (e)=>{
+				if (e.key=='-'){
+					velocity-=5;
+					console.log(velocity)
+				}
+				else if (e.key=='+'){
+					velocity+=5;
+					console.log(velocity)
+				}
+			}
 			
 			
 			
@@ -221,6 +230,8 @@ const faceMove = (x, y, xi, yi)=>{
 			addEventListener('mousedown', blink);
 			
 			addEventListener('mouseup', blink);
+
+			addEventListener('keydown', acelerate)
 			
 addEventListener('click', reduceEvileye)
 
