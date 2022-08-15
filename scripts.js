@@ -43,6 +43,8 @@ const blink = (e)=>{
 
 
 // función mover los ojos:
+let mouseX;
+let mouseY;
 const eyesRotation = (e)=>{
 	eyes.forEach(eye=>{
 		
@@ -50,8 +52,11 @@ const eyesRotation = (e)=>{
 		//devuelve un objecto (DOMRect) con datos sobre la posición del elemento relativa a la esquina superior izquierda de la ventana.
 		
 		// coordenadas del mouse
-		const mouseX = e.clientX;
-		const mouseY = e.clientY;
+			// si la función fue lanzada de manera recursiva (no por el evento mousemove), e no existiría y por lo tanto las coordenadas serán las últimas que tuvo el mouse cuando se movió:
+		if (e){
+			mouseX = e.clientX;
+			mouseY = e.clientY;
+		}
 		
 		// coordenadas del ojo
 		const eyeX = eyePos.left + (eyePos.width/2);
@@ -74,12 +79,8 @@ const eyesRotation = (e)=>{
 		
 		eye.style.transform = `rotate(${deg}deg)`;
 		
-		// console.log(eye.firstElementChild.className)
-		// console.log("eye coord: "+eyeX, eyeY)
-		// console.log('mouse coord: '+ mouseX, mouseY)
-		// console.log('delta: '+ deltaX, deltaY)
-		// console.log('rad: '+ rad, 'deg: ', deg + "°")
 	})
+	setTimeout(eyesRotation, 500);
 }
 
 // Función para disminuir el rojo de los ojos:
@@ -94,9 +95,10 @@ const reduceEvileye = ()=>{
 
 
 // Función para mover aleatoriamente la cara:
-const face = document.querySelector('.face');
+const face = document.querySelectorAll('.face');
 let velocity = 700
 
+face.forEach(face=>{
 const faceMove = (x, y, xi, yi)=>{
 	
 	const maxWidth=innerWidth - face.clientWidth;
@@ -178,12 +180,12 @@ const faceMove = (x, y, xi, yi)=>{
 					
 					// si pega en la izquierda (xi>x) o en la derecha (xi<x)
 					(xi>x)? 
-				(
-					xf = Math.abs(yfc - y) / Math.tan(rad)
-					)
-					:
-					(
-						xf = maxWidth - (Math.abs(yfc - y) / Math.tan(rad))
+						(
+							xf = Math.abs(yfc - y) / Math.tan(rad)
+						)
+						:
+						(
+							xf = maxWidth - (Math.abs(yfc - y) / Math.tan(rad))
 						);
 						
 						h=Math.round(Math.sqrt(Math.pow(x-xf,2)+Math.pow(yfc-y, 2)))	
@@ -192,8 +194,7 @@ const faceMove = (x, y, xi, yi)=>{
 					yi=y;
 					xi=x;
 				}
-				let transition = h/velocity;
-				
+				let transition = h/velocity;				
 				
 				face.style.transition=`transform ${transition}s linear`;
 				face.style.transform=`translate(${xfc}px, ${yfc}px)`;
@@ -201,37 +202,42 @@ const faceMove = (x, y, xi, yi)=>{
 				
 				setTimeout(()=>{
 					faceMove(xfc, yfc, xi, yi);
-				}, transition*1000)
+				}, 
+				transition*1000
+				)
 				
 				
 				
-			}
+}
+			
+faceMove()
+})
+		
+// Función acelerar movimiento de face:	
+const acelerate = (e)=>{
+	if (e.key=='-'){
+		if (velocity<=150) return;
+		velocity-=25;
+		console.log(velocity)
+	}
+	else if (e.key=='+'){
+		if (velocity>=1750) return;
+		velocity+=25;
+		console.log(velocity)
+	}
+}
+			
+			
+			
+			
+// Escuchas de eventos
+addEventListener('mousemove', eyesRotation)
 
-			faceMove();
-			
-			
-			const acelerate = (e)=>{
-				if (e.key=='-'){
-					velocity-=5;
-					console.log(velocity)
-				}
-				else if (e.key=='+'){
-					velocity+=5;
-					console.log(velocity)
-				}
-			}
-			
-			
-			
-			
-			// Escuchas de eventos
-			addEventListener('mousemove', eyesRotation)
-			
-			addEventListener('mousedown', blink);
-			
-			addEventListener('mouseup', blink);
+addEventListener('mousedown', blink);
 
-			addEventListener('keydown', acelerate)
+addEventListener('mouseup', blink);
+
+addEventListener('keydown', acelerate)
 			
 addEventListener('click', reduceEvileye)
 
