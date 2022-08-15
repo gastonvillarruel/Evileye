@@ -104,6 +104,7 @@ const faceMove = (x, y, xi, yi)=>{
 	
 	let rad;
 	let xf, xfc, yf, yfc, h;
+	// h será la hipotenusa para calcular el tiempo de la animación en cada rebote.
 	
 	// función llamada sin argumentos (primer movimiento):
 	if (y==undefined && x==undefined) {	
@@ -118,16 +119,16 @@ const faceMove = (x, y, xi, yi)=>{
 	else if (x>0 && x<maxWidth){
 		// cálculo del ángulo dependiendo si pega arriba (yi>y) o abajo (yi<y):
 		(yi>y)? 
-			rad = Math.atan(Math.abs(x-xi)/yi) 
-			:
-			rad = Math.atan(Math.abs(x-xi)/(maxHeight-yi));
-
+		rad = Math.atan(Math.abs(x-xi)/yi) 
+		:
+		rad = Math.atan(Math.abs(x-xi)/(maxHeight-yi));
+		
 		xf = x + (Math.tan(rad)*maxHeight*Math.sign(x-xi));
-
+		
 		// si xf está dentro de la pantalla (0 a maxWidth)
 		if (xf>=0 && xf<=maxWidth){
 			xfc=xf;
-
+			
 			// si venía de abajo, volverá abajo,y viceversa
 			(yi>y)? yf = maxHeight : yf = 0; 
 			yfc = yf;
@@ -136,105 +137,91 @@ const faceMove = (x, y, xi, yi)=>{
 		// si xf está fuera de la pantalla
 		else {
 			(xf<0)? xfc = 0 : xfc = maxWidth;
+			
+			// si venía de abajo, irá hacia abajo pegando en uno de los lados de la pantalla:
 			(yi>y)? 
-				(
-					yf = Math.abs(xfc - x) / Math.tan(rad),
-					h=Math.round(yf/Math.cos(rad))
+			(
+				yf = Math.abs(xfc - x) / Math.tan(rad),
+				h=Math.round(Math.sqrt(Math.pow(yf, 2)+Math.pow(Math.abs(xfc-x), 2)))
 				)
 				:
 				(
 					yf = maxHeight - (Math.abs(xfc - x) / Math.tan(rad)),
-					h=Math.round(maxHeight-yf/Math.cos(rad))
-				)
-			yfc=yf;
-		}
-		yi=y; 
-		xi=x;
-	}
-	//si pega en los costados:
-	else{
-		(xi>x)? 
-		rad = Math.atan(Math.abs(y-yi)/xi) 
-		:
-		rad = Math.atan(Math.abs(y-yi)/(maxWidth-xi));
-		yf = y + (Math.tan(rad)*maxWidth*Math.sign(y-yi));
-		if (yf>=0 && yf<=maxHeight){
-			yfc=yf;
-			(xi>x)? xf = maxWidth : xf = 0;
-			xfc=xf;
-			h=Math.round(maxWidth/Math.cos(rad));
-		}else {
-			(yf<0)? yfc = 0 : yfc = maxHeight;
-			(xi>x)? 
-				xf = Math.abs(yfc - y) / Math.tan(rad)
+					h=Math.round(Math.sqrt(Math.pow(maxHeight-yf, 2)+Math.pow(Math.abs(xfc-x), 2)))
+					)
+					yfc=yf;
+				}
+				yi=y; 
+				xi=x;
+			}
+			//si pega en los costados:
+			else{
+				// cálculo del ángulo dependiendo si pega en la izquierda (xi>x) o en la derecha (xi<x):
+				(xi>x)? 
+				rad = Math.atan(Math.abs(y-yi)/xi) 
 				:
-				xf = maxWidth - (Math.abs(yfc - y) / Math.tan(rad));
-			h=Math.round(maxWidth/Math.cos(rad))
+				rad = Math.atan(Math.abs(y-yi)/(maxWidth-xi));
 				
-			xfc=xf;
-		}
-		yi=y;
-		xi=x;
-	}
-		
-		let transition = h/1000;
-		
-		console.log(h, transition)
+				yf = y + (Math.tan(rad)*maxWidth*Math.sign(y-yi));
+				
+				// si yf está dentro de la pantalla (entre 0 y maxHeight)
+				if (yf>=0 && yf<=maxHeight){
+					yfc=yf;
+					(xi>x)? xf = maxWidth : xf = 0;
+					xfc=xf;
+					h=Math.round(Math.sqrt(Math.pow(yf-yi,2)+Math.pow(maxWidth,2)))
+				}
+				// si yf está fuera del rango de la pantalla
+				else {
+					(yf<0)? yfc = 0 : yfc = maxHeight;
+					
+					// si pega en la izquierda (xi>x) o en la derecha (xi<x)
+					(xi>x)? 
+				(
+					xf = Math.abs(yfc - y) / Math.tan(rad)
+					)
+					:
+					(
+						xf = maxWidth - (Math.abs(yfc - y) / Math.tan(rad))
+						);
+						
+						h=Math.round(Math.sqrt(Math.pow(x-xf,2)+Math.pow(yfc-y, 2)))	
+						xfc=xf;
+					}
+					yi=y;
+					xi=x;
+				}
+				let velocity = 700
+				let transition = h/velocity;
+				
+				
+				face.style.transition=`transform ${transition}s linear`;
+				face.style.transform=`translate(${xfc}px, ${yfc}px)`;
+				
+				
+				setTimeout(()=>{
+					faceMove(xfc, yfc, xi, yi);
+				}, transition*1000)
+				
+				
+				
+			}
 
-		face.style.transition=`transform ${transition}s linear`;
-		face.style.transform=`translate(${xfc}px, ${yfc}px)`;
-		
-
-	setTimeout(()=>{
-		const faceLocation = face.getBoundingClientRect();
-		//console.dir(faceLocation);
-		faceMove(xfc, yfc, xi, yi);
-	}, h)
-	
-	
-	
-}
-
-// let dir;
-// const compDir=()=>{
-
-// }
-// const faceMove = (x)=>{
-// 	//velX+=4;
-
-// 	let direction = compDir();
-
-// 	if (dir==ltr){
-// 		x+=4;
-// 	}else x-=4;
-
-// 	let facePos= face.getBoundingClientRect();
-// 	console.dir(facePos)
-
-// 	face.style.transform=`translate(${x}px)`
-	
-// 	if (facePos.left>=innerWidth-facePos.width) {
-// 		dir = rtl;
-// 	}
-// 	setTimeout(()=>{
-// 		faceMove(x)
-// 	},10)
-// }
-faceMove();
-
-
-
-
-
-
-
-// Escuchas de eventos
-addEventListener('mousemove', eyesRotation)
-
-addEventListener('mousedown', blink);
-
-addEventListener('mouseup', blink);
-
+			faceMove();
+			
+			
+			
+			
+			
+			
+			
+			// Escuchas de eventos
+			addEventListener('mousemove', eyesRotation)
+			
+			addEventListener('mousedown', blink);
+			
+			addEventListener('mouseup', blink);
+			
 addEventListener('click', reduceEvileye)
 
 
@@ -249,5 +236,6 @@ Un Radián es el ángulo central de una circunferencia que abarca un arco de igu
 
 Un cateto, es cualquiera de los dos lados menores de un triángulo rectángulo, los que conforman el ángulo recto. El lado de mayor medida se denomina hipotenusa.
 
+La hipotenusa es = a la suma de los cuadrados de los catetos.
 
 */
